@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import patient_service
 from models import PatientModel
 
@@ -14,4 +14,5 @@ def patient_details(patient_id: str):
 
 @app.post("/patient")
 def add_patient(patient: PatientModel):
-    patient_service.add_patient(patient)
+    if not patient_service.add_patient(patient):
+        raise HTTPException(status_code=400, detail="Patient already exists!")
